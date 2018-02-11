@@ -12,6 +12,29 @@ Bonus tasks (optional):
 - Use ansible to configure the firewall on the remote server to allow inbound connections on postgres port
 - Use ansible to configure a schedulet backup (dump) of the postgresql server.
 
+Prerequisits
+============
+
+The following steps are necessary on a fresh Ubuntu 16.04 minimal installation before running this playbook:
+
+1. Install python2, by default ubuntu ships with python3, but python2 is required by ansible:
+
+    ```bash
+    sudo apt update && sudo apt install -y python
+    ```
+
+2. Because this playbook enables the UFW firewall on Ubuntu, ensure SSH access is granted before the UFW service is started by ansible to prevent being locked out of the system:
+
+    ```bash
+    sudo ufw allow OpenSSH
+    ```
+
+3. Because the `ssh` role included here disables SSH password authentication and allows authentication only via private/public keypair, ensure your public key is copied to the remote server in the file `/home/remote_user/.ssh/authorized_keys`. Also ensure the permissions on the `.ssh` directory are correct because OpenSSH is very sensitive about permissions:
+
+    ```bash
+    chmod 700 /home/remote_user/.ssh
+    chmod 600 /home/remote_user/.ssh/authorized_keys
+    ```
 
 Solution
 ========
