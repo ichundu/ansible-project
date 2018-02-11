@@ -46,7 +46,6 @@ Solution
     where:
 
     - `"-i inventory"` specifies the hosts/inventory file.
-- 
     - `"-u remote_user"` is the username to be used to connect to the remote host.
     - `"site.yml"` is the ansible playbook to be executed.
 
