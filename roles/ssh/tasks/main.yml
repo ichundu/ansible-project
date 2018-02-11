@@ -1,0 +1,15 @@
+---
+# tasks file for ssh
+
+- name: Configure SSH to allow logins only with keypairs
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: "^PubkeyAuthentication"
+      line: "PubkeyAuthentication yes"
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication no"
+  notify: restart ssh

@@ -1,0 +1,53 @@
+---
+# tasks file for postgresql
+
+- name: Install PostgreSQL database
+  apt:
+    name: "postgresql-{{ postgresql_version }}"
+    state: present
+
+- name: Start PostgreSQL and enable boot-start
+  service:
+    name: postgresql
+    state: started
+    enabled: true
+
+- name: Allow inbound connections from custom network range to PostgreSQL
+  lineinfile:
+    path: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+    line: "host    all             all             10.231.0.0/16            md5"
+    state: present
+  notify: restart postgresql
+
+
+### Bonus tasks (optional)
+- name: Ensure ufw firewall service is started and enabled
+  service:
+    name: ufw
+    state: started
+    enabled: true
+
+- name: Configure UFW firewall to allow inbound connections to PostgreSQL
+  ufw:
+    comment: PostgreSQL inbound connections
+    direction: in
+    to_port: 5432
+    from_ip: 10.231.0.0/16
+    proto: tcp
+    rule: allow
+    state: enabled
+  notify: restart ufw
+
+- name: Ensure backups directory for postgresql dumps is present
+  file:
+    path: "{{ postgresql_backup_dir }}"
+    state: directory
+    owner: postgres
+    group: 
+
+- name: Schedule automatic backups for PostgreSQL database
+  cron:
+    name: "Automatic daily backups for Postgresql"
+    user: postgres
+    hour: 0
+    job: "pg_dump {{ postgresql_database_name }} > {{ postgresql_backup_dir }}/postgres_backup_$(date +\\%Y\\%m\\%d).dump"

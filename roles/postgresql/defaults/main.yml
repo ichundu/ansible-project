@@ -1,0 +1,9 @@
+---
+# defaults file for postgresql
+
+# The default postgresql version available in the Ubuntu 16.04 repo
+postgresql_version: "9.5"
+
+# Backup settings
+postgresql_backup_dir: "/var/lib/postgresql/backups"
+postgresql_database_name: "postgres"

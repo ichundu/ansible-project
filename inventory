@@ -1,0 +1,7 @@
+# Example invetory file
+
+# Default host
+localhost           ansible_connection=local        ansible_python_interpreter=/usr/bin/python2
+
+# [group_name]
+# hostname           ansible_host=192.168.1.2
